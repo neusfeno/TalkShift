@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Slang Dictionary</title>
+</head>
+<body>
+    <h1>Slang Dictionary</h1>
+    <form method="POST">
+        <input type="text" name="query" placeholder="Search for a slang" required>
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for slang in slangs %}
+        <li>
+            <strong>{{ slang.word }}</strong>: {{ slang.definition }} 
+            <em>(Example: {{ slang.example }})</em>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
