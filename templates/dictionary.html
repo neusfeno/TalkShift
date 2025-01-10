@@ -4,50 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Slang Dictionary</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: #fff;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        strong {
-            color: #007BFF;
-        }
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #007BFF;
-            font-weight: bold;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body>
     <h1>Slang Dictionary</h1>
     <ul>
-        {% for slang, definition in slangs.items() %}
-        <li><strong>{{ slang }}</strong>: {{ definition }}</li>
+        {% for slang, meaning in slangs.items() %}
+            <li><strong>{{ slang }}</strong>: {{ meaning }}</li>
         {% endfor %}
     </ul>
     <a href="/">Back to Home</a>

@@ -4,17 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TalkShift</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-<body style="background: #F1F1F1;">
-    <div style="width: 1280px; height: 832px; margin: auto;">
-        <div style="width: 878px; margin: auto; text-align: center; color: black; font-size: 128px; font-family: Inter; font-weight: 500;">TalkShi(f)t</div>
-        <div style="width: 649px; margin: auto; text-align: center; color: black; font-size: 32px; font-family: Inter; font-weight: 700;">UNLOCK A NEW LANGUAGE</div>
-        <div style="display: flex; justify-content: center; margin-top: 50px;">
-            <a href="/dictionary" style="width: 335px; height: 61px; margin: 0 20px; background: #888888; box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25); border-radius: 9px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #F1F1F1; font-size: 24px; font-family: Inter; font-weight: 700;">Dictionary</a>
-            <a href="/translator" style="width: 335px; height: 61px; margin: 0 20px; background: #888888; box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25); border-radius: 9px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #F1F1F1; font-size: 24px; font-family: Inter; font-weight: 700;">Translator</a>
-            <a href="/generator" style="width: 335px; height: 61px; margin: 0 20px; background: #888888; box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.25); border-radius: 9px; display: flex; align-items: center; justify-content: center; text-decoration: none; color: #F1F1F1; font-size: 24px; font-family: Inter; font-weight: 700;">Generator</a>
-        </div>
-    </div>
+<body>
+    <h1>Welcome to TalkShift</h1>
+    <ul>
+        <li><a href="/dictionary">Dictionary</a></li>
+        <li><a href="/translator">Translator</a></li>
+    </ul>
 </body>
 </html>
