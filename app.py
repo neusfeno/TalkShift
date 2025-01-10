@@ -1,113 +1,118 @@
-import os
 from flask import Flask, render_template, request, jsonify
+import json
 
 app = Flask(__name__)
 
-# Diccionario de slangs
+# Slang dictionary data (91 words)
 slangs_data = {
     "af": "super",
     "53x": "sex",
     "a karen": "a rude and entitled middle-aged woman",
-    "ate": "succeeded greatly",
-    "bae": "before anyone else",
-    "basic": "boring or unoriginal",
+    "ate": "to succeed at something",
+    "bae": "babe or significant other",
+    "basic": "unoriginal",
     "bf/gf": "boyfriend or girlfriend",
     "bff": "best friends forever",
-    "big yikes": "extremely embarrassing",
+    "big yikes": "very embarrassing",
     "body count": "number of people someone has slept with",
     "bruh": "bro or dude",
-    "cap": "a lie",
-    "ceo": "someone who excels at something",
-    "cheugy": "trying too hard or out of date",
+    "cap": "lie or false",
+    "no cap": "no lie or true",
+    "ceo": "excellent at something",
+    "cheugy": "outdated or trying too hard",
     "crashy": "crazy and trashy",
     "cringe": "awkward or embarrassing",
-    "crunk": "crazy and drunk",
+    "crunk": "getting high and drunk at the same time",
     "cu46": "see you for sex",
     "curve": "reject someone romantically",
-    "dayger": "a party during the day",
-    "dead": "something so funny it 'killed' you with laughter",
-    "dope": "cool or awesome",
-    "emo": "emotional or dramatic",
-    "extra": "over-the-top",
-    "fam": "close friends or family",
-    "fire": "amazing or awesome",
+    "dayger": "daytime party",
+    "dead": "laughing a lot",
+    "dope": "awesome or cool",
+    "emo": "emotional or drama queen",
+    "extra": "over the top",
+    "fam": "group of friends",
+    "fire": "amazing or great",
     "fit": "outfit",
-    "flex": "to show off",
-    "function/func": "a party",
+    "flex": "show off",
+    "function/func": "party",
     "ghosted": "cut off communication",
-    "go off": "to continue with intensity",
+    "go off": "encourage someone to continue",
     "goat": "greatest of all time",
-    "gucci": "good or cool",
-    "gyat": "goddamn or thick",
+    "gucci": "good or fine",
+    "gyat": "reaction to a big butt",
     "hangry": "hungry and angry",
-    "hits different": "feels different or impactful",
+    "hits different": "something impactful",
     "irl": "in real life",
-    "it's giving": "describing a vibe or style",
+    "it’s giving": "describing vibes or feelings",
     "iykyk": "if you know, you know",
-    "kick back": "a small party",
+    "kick back": "small party",
     "lit": "amazing or exciting",
-    "lmirl": "let's meet in real life",
-    "low-key": "subtly or moderately",
-    "molly": "MDMA, a party drug",
-    "mood": "agreeing with a vibe",
-    "netflix and chill": "a pretense for hooking up",
-    "no cap": "totally true",
-    "noob/n00b": "a newbie or inexperienced person",
-    "ok, boomer": "dismissive to outdated ideas",
+    "lmirl": "let’s meet in real life",
+    "low-key": "subtly or slightly",
+    "molly": "ecstasy (drug)",
+    "mood": "relatable situation",
+    "netflix and chill": "meet up for intimacy",
+    "noob/n00b": "beginner or inexperienced",
+    "ok boomer": "outdated attitude",
     "omg": "oh my gosh",
-    "ong": "on god, or I swear",
-    "periodt": "emphasizing a statement",
-    "plug": "someone who provides drugs",
-    "pop off": "to express anger",
-    "preppy": "stylish or upper-class",
-    "rager": "a big party",
-    "ratio'd": "more negative responses than positive",
-    "requestion": "to question again",
+    "ong": "swear to god",
+    "periodt": "end of discussion",
+    "plug": "drug supplier",
+    "pop off": "react angrily",
+    "preppy": "stylish or upper-class aesthetic",
+    "rager": "big party",
+    "ratio’d": "more negative feedback than positive",
+    "requestion": "question again or make a request",
     "rizz": "charisma or charm",
     "salty": "bitter or upset",
     "serving": "looking good or stylish",
     "ship": "support a relationship",
     "shook": "shocked or surprised",
     "sic/sick": "cool or awesome",
-    "sigma": "a popular but independent person",
-    "simp": "someone overly eager for another",
-    "slay": "to succeed or look amazing",
-    "sleep on": "underestimate",
-    "sloshed": "drunk",
+    "sigma": "popular but a loner",
+    "simp": "overly attentive to someone",
+    "slay": "succeed or look great",
+    "sleep on": "underestimate something",
+    "sloshed": "very drunk",
     "smash": "casual sex",
-    "snatched": "perfect or fashionable",
+    "snatched": "looking perfect or fashionable",
     "spill the tea": "share gossip",
     "squad": "close group of friends",
-    "stan": "an overzealous fan",
+    "stan": "overzealous fan",
     "sus": "suspicious",
     "tbh": "to be honest",
-    "tea": "gossip",
-    "thirsty": "desperate for attention",
-    "throw down": "host a party",
-    "throw shade": "insult someone",
-    "tight": "a close relationship",
-    "tool": "an obnoxious person",
+    "tea": "gossip or news",
+    "thirsty": "seeking attention",
+    "throw down": "throw a party",
+    "throw shade": "insult or criticize",
+    "tight": "close relationship",
+    "tool": "obnoxious or rude person",
     "tope": "tight and dope",
     "turnt": "drunk or high",
-    "vanilla": "boring or plain",
+    "vanilla": "boring or basic",
     "wttp": "want to trade photos",
-    "x": "ecstasy",
-    "yassify": "a dramatic makeover",
-    "yeet": "to throw something forcefully",
+    "x": "ecstasy (drug)",
+    "yassify": "dramatic makeover with beauty filters",
+    "yeet": "throw something quickly",
     "yolo": "you only live once"
 }
 
-# Ruta principal
+# Home page
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# Ruta del diccionario
+# Slang dictionary page
 @app.route("/dictionary")
 def dictionary():
     return render_template("dictionary.html", slangs=slangs_data)
 
-# Ruta del traductor
+# Slang translator page
+@app.route("/translate")
+def translate_page():
+    return render_template("translate.html")
+
+# Translation API
 @app.route("/translate", methods=["POST"])
 def translate():
     data = request.get_json()
@@ -116,14 +121,5 @@ def translate():
     translated = [slangs_data.get(word.lower(), word) for word in words]
     return jsonify({"translated_text": " ".join(translated)})
 
-# Ruta del generador de frases
-@app.route("/generate", methods=["POST"])
-def generate():
-    data = request.get_json()
-    words = data.get("words", [])
-    generated = [slangs_data.get(word.lower(), word) for word in words]
-    return jsonify({"generated_text": " ".join(generated)})
-
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=5000)
