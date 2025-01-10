@@ -1,7 +1,17 @@
-from flask import Flask, render_template, request
+import os
+from flask import Flask
 
 app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Hello, World!"
+
+if __name__ == "__main__":
+    # Usa el puerto asignado por Render (predeterminado es 10000 si no está definido)
+    port = int(os.environ.get("PORT", 10000))
+    # Vincula a 0.0.0.0 para que Render pueda acceder
+    app.run(host="0.0.0.0", port=port)
 # Ruta para la página principal
 @app.route('/')
 def home():
