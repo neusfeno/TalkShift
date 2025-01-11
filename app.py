@@ -47,6 +47,12 @@ def generator():
         return jsonify({"error": "Invalid input"}), 400
     return render_template('generator.html')
 
+import os
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Render asigna un puerto específico
+    app.run(host="0.0.0.0", port=port)        # Tu app escuchará en 0.0.0.0
+
 
 if __name__ == '__main__':
     app.run(debug=True)
