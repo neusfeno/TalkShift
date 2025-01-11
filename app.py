@@ -1,35 +1,55 @@
-from flask import Flask, render_template, request, jsonify
 import json
+from flask import Flask, render_template, request, jsonify
+
 
 app = Flask(__name__)
 
-# Cargar el diccionario de slangs
-with open("slangs.json", "r") as file:
-    slangs_data = json.load(file)
 
-# Ruta principal
-@app.route("/")
+# Cargar slangs desde el archivo JSON
+with open('static/slangs.json', 'r', encoding='utf-8') as f:
+    slangs = json.load(f)["slangs"]
+
+
+# Diccionario para facilitar la traducción
+slang_dict = {item["word"].lower(): item["translation"] for item in slangs}
+
+
+@app.route('/')
 def home():
-    return render_template("index.html")
+    return render_template('index.html')
 
-# Ruta para el diccionario
-@app.route("/dictionary")
+
+@app.route('/dictionary')
 def dictionary():
-    return render_template("dictionary.html", slangs=slangs_data)
+    return render_template('dictionary.html', slangs=slangs)
 
-# Ruta para el traductor
-@app.route("/translator")
-def translator_page():
-    return render_template("translator.html")
 
-# API para traducir texto
-@app.route("/translator", methods=["POST"])
+@app.route('/translator', methods=['GET', 'POST'])
 def translator():
-    data = request.get_json()
-    text = data.get("text", "")
-    words = text.split()
-    translated = [slangs_data.get(word.lower(), word) for word in words]
-    return jsonify({"translated_text": " ".join(translated)})
+    if request.method == 'POST':
+        text = request.json.get('text', '').lower()
+        words = text.split()
+        translated_words = [slang_dict.get(word, word) for word in words]
+        translated_text = ' '.join(translated_words)
+        return jsonify({"translated_text": translated_text})
+    return render_template('translator.html')
 
-if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0", port=5000)
+
+@app.route('/generator', methods=['GET', 'POST'])
+def generator():
+    if request.method == 'POST':
+        new_word = request.json.get('word', '')
+        new_translation = request.json.get('translation', '')
+        if new_word and new_translation:
+            slangs.append({"word": new_word, "definition": "", "translation": new_translation})
+            slang_dict[new_word.lower()] = new_translation
+            return jsonify({"message": "Word added successfully!"})
+        return jsonify({"error": "Invalid input"}), 400
+    return render_template('generator.html')
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+

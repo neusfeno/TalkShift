@@ -1,15 +1,52 @@
-body {
-    margin: 0;
-    padding: 0;
+/* Title and Search Box Container */
+.title-and-search {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding: 0 20px;
+}
+
+/* Title */
+.title-and-search h2 {
+    font-size: 32px; /* Consistent with other pages */
     font-family: 'Inter', sans-serif;
-    background-color: #F1F1F1;
+    font-weight: 500; /* Matches other pages */
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
+/* Search Box */
+#search-box {
+    width: 40%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif; /* Ensure consistency */
 }
+<style>
+    /* Ajuste del contenedor para centrado */
+    .translate-button-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px 0;
+    }
 
-li {
-    list-style: none;
-}
+    .translate-button {
+        width: 150px;
+        height: 50px;
+        background-color: #0022FF;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.2s;
+    }
+
+    .translate-button:hover {
+        background-color: #0045FF;
+    }
+</style>

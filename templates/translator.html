@@ -3,27 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slang Translator</title>
+    <title>TalkShift - Translator</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F1F1F1;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+        .container {
+            width: 900px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 64px;
+            font-weight: 500;
+            color: black;
+        }
+        .header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #888888;
+            margin-bottom: 20px;
+        }
+        .textarea-container, .input-container {
+            position: relative;
+            margin: 20px auto;
+        }
+        textarea, input {
+            width: 90%;
+            border: 2px solid #888888;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        textarea {
+            height: 150px;
+        }
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #0022FF;
+        }
+        .translate-button-container, .add-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .translate-button, .add-button {
+            width: 150px;
+            height: 50px;
+            background-color: #0022FF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .translate-button:hover, .add-button:hover {
+            background-color: #0045FF;
+        }
+    </style>
 </head>
 <body>
-    <h1>Slang Translator</h1>
-    <form id="translator-form">
-        <textarea id="text-to-translate" placeholder="Enter text to translate..."></textarea>
-        <button type="button" onclick="translateText()">Translate</button>
-    </form>
-    <h2 id="translated-result"></h2>
-    <a href="/">Back to Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>TalkShi(f)t</h1>
+            <h2>Translate Now</h2>
+        </div>
 
+        <!-- Translation Section -->
+        <div class="textarea-container">
+            <label>From: Gen Z</label>
+            <textarea id="input-text" placeholder="Enter Gen Z text here..."></textarea>
+        </div>
+        <div class="translate-button-container">
+            <button class="translate-button" onclick="translateText()">Translate</button>
+        </div>
+        <div class="textarea-container">
+            <label>To: Millennial</label>
+            <textarea id="output-text" placeholder="Translation will appear here..." readonly></textarea>
+        </div>
+
+        <!-- Add New Word/Expression Section -->
+        <div class="input-container">
+            <label>Add a New Word/Expression (Gen Z):</label>
+            <input id="new-word" type="text" placeholder="Enter Gen Z word/expression here..." />
+        </div>
+        <div class="input-container">
+            <label>Translation (Millennial):</label>
+            <input id="new-translation" type="text" placeholder="Enter Millennial translation here..." />
+        </div>
+        <div class="add-button-container">
+            <button class="add-button" onclick="addNewWord()">Add</button>
+        </div>
+    </div>
     <script>
-        async function translateText() {
-            const text = document.getElementById("text-to-translate").value;
-            const response = await fetch("/translator", {
-                method: "POST",
-                headers: { "Content-Type: application/json" },
-                body: JSON.stringify({ text: text })
+        // Diccionario inicial con las 91 palabras y frases
+        let slangs = [
+            {"pattern": /\bAF\b/gi, "translation": "super"},
+            {"pattern": /\b53X\b/gi, "translation": "sex"},
+            {"pattern": /\bA Karen\b/gi, "translation": "entitled woman"},
+            {"pattern": /\bAte\b/gi, "translation": "nailed it"},
+            {"pattern": /\bBae\b/gi, "translation": "babe"},
+            {"pattern": /\bBasic\b/gi, "translation": "boring"},
+            {"pattern": /\bBF\/GF\b/gi, "translation": "partner"},
+            {"pattern": /\bBFF\b/gi, "translation": "best friend"},
+            {"pattern": /\bBig Yikes\b/gi, "translation": "so embarrassing"},
+            {"pattern": /\bBody count\b/gi, "translation": "partners"},
+            {"pattern": /\bBruh\b/gi, "translation": "bro"},
+            {"pattern": /\bCap\b/gi, "translation": "lie"},
+            {"pattern": /\bCEO\b/gi, "translation": "master"},
+            {"pattern": /\bCheugy\b/gi, "translation": "outdated"},
+            {"pattern": /\bCrashy\b/gi, "translation": "messy"},
+            {"pattern": /\bCringe\b/gi, "translation": "awkward"},
+            {"pattern": /\bCrunk\b/gi, "translation": "wasted"},
+            {"pattern": /\bCU46\b/gi, "translation": "see you for sex"},
+            {"pattern": /\bCurve\b/gi, "translation": "reject"},
+            {"pattern": /\bDayger\b/gi, "translation": "day party"},
+            {"pattern": /\bDead\b/gi, "translation": "hilarious"},
+            {"pattern": /\bDope\b/gi, "translation": "cool"},
+            {"pattern": /\bEmo\b/gi, "translation": "emotional"},
+            {"pattern": /\bExtra\b/gi, "translation": "overdramatic"},
+            {"pattern": /\bFam\b/gi, "translation": "family"},
+            {"pattern": /\bFire\b/gi, "translation": "amazing"},
+            {"pattern": /\bFit\b/gi, "translation": "outfit"},
+            {"pattern": /\bFlex\b/gi, "translation": "show off"},
+            {"pattern": /\bFunction\/Func\b/gi, "translation": "party"},
+            {"pattern": /\bGhosted\b/gi, "translation": "ignored"},
+            {"pattern": /\bGo Off\b/gi, "translation": "keep going"},
+            {"pattern": /\bGOAT\b/gi, "translation": "the best"},
+            {"pattern": /\bGucci\b/gi, "translation": "cool"},
+            {"pattern": /\bGyat\b/gi, "translation": "wow"},
+            {"pattern": /\bHangry\b/gi, "translation": "hungry and angry"},
+            {"pattern": /\bHits Different\b/gi, "translation": "feels unique"},
+            {"pattern": /\bIRL\b/gi, "translation": "in real life"},
+            {"pattern": /\bIt's giving\b/gi, "translation": "it’s like"},
+            {"pattern": /\bIYKYK\b/gi, "translation": "if you understand"},
+            {"pattern": /\bKick back\b/gi, "translation": "hangout"},
+            {"pattern": /\bLit\b/gi, "translation": "amazing"},
+            {"pattern": /\bLMIRL\b/gi, "translation": "let’s meet up"},
+            {"pattern": /\bLow-Key\b/gi, "translation": "kind of"},
+            {"pattern": /\bMolly\b/gi, "translation": "MDMA"},
+            {"pattern": /\bMood\b/gi, "translation": "vibe"},
+            {"pattern": /\bNetflix and chill\b/gi, "translation": "come over"},
+            {"pattern": /\bNo cap\b/gi, "translation": "no lie"},
+            {"pattern": /\bNoob\/n00b\b/gi, "translation": "newbie"},
+            {"pattern": /\bOK, Boomer\b/gi, "translation": "outdated"},
+            {"pattern": /\bOMG\b/gi, "translation": "oh my gosh"},
+            {"pattern": /\bONG\b/gi, "translation": "I swear"},
+            {"pattern": /\bPeriodt\b/gi, "translation": "and that’s final"},
+            {"pattern": /\bPlug\b/gi, "translation": "dealer"},
+            {"pattern": /\bPop Off\b/gi, "translation": "get angry"},
+            {"pattern": /\bPreppy\b/gi, "translation": "stylish"},
+            {"pattern": /\bRager\b/gi, "translation": "huge party"},
+            {"pattern": /\bRatio’d\b/gi, "translation": "negative feedback"},
+            {"pattern": /\bRizz\b/gi, "translation": "charm"},
+            {"pattern": /\bSalty\b/gi, "translation": "bitter"},
+            {"pattern": /\bServing\b/gi, "translation": "looking good"},
+            {"pattern": /\bShip\b/gi, "translation": "support as a couple"},
+            {"pattern": /\bShook\b/gi, "translation": "shocked"},
+            {"pattern": /\bSick\b/gi, "translation": "cool"},
+            {"pattern": /\bSigma\b/gi, "translation": "independent"},
+            {"pattern": /\bSimp\b/gi, "translation": "overly attached"},
+            {"pattern": /\bSlay\b/gi, "translation": "excel"},
+            {"pattern": /\bSleep On\b/gi, "translation": "ignore"},
+            {"pattern": /\bSloshed\b/gi, "translation": "drunk"},
+            {"pattern": /\bSmash\b/gi, "translation": "hook up"},
+            {"pattern": /\bSnatched\b/gi, "translation": "flawless"},
+            {"pattern": /\bSpill the Tea\b/gi, "translation": "share gossip"},
+            {"pattern": /\bStan\b/gi, "translation": "fanatic"},
+            {"pattern": /\bSus\b/gi, "translation": "suspicious"},
+            {"pattern": /\bTBH\b/gi, "translation": "to be honest"},
+            {"pattern": /\bTea\b/gi, "translation": "gossip"},
+            {"pattern": /\bThirsty\b/gi, "translation": "attention-seeking"},
+            {"pattern": /\bThrow down\b/gi, "translation": "host a party"},
+            {"pattern": /\bThrow shade\b/gi, "translation": "criticize"},
+            {"pattern": /\bTight\b/gi, "translation": "close"},
+            {"pattern": /\bTool\b/gi, "translation": "jerk"},
+            {"pattern": /\bTope\b/gi, "translation": "awesome"},
+            {"pattern": /\bTurnt\b/gi, "translation": "intoxicated"},
+            {"pattern": /\bVanilla\b/gi, "translation": "plain"},
+            {"pattern": /\bWTTP\b/gi, "translation": "trade photos"},
+            {"pattern": /\bYeet\b/gi, "translation": "throw"},
+            {"pattern": /\bYassify\b/gi, "translation": "over-edit"},
+            {"pattern": /\bYOLO\b/gi, "translation": "live once"}
+        ];
+
+        // Función para traducir
+        function translateText() {
+            const inputText = document.getElementById("input-text").value;
+            let translatedText = inputText;
+
+            slangs.forEach(slang => {
+                translatedText = translatedText.replace(slang.pattern, slang.translation);
             });
-            const data = await response.json();
-            document.getElementById("translated-result").innerText = data.translated_text;
+
+            document.getElementById("output-text").value = translatedText;
+        }
+
+        // Función para agregar nuevas palabras/frases
+        function addNewWord() {
+            const newWord = document.getElementById("new-word").value.trim();
+            const newTranslation = document.getElementById("new-translation").value.trim();
+
+            if (newWord && newTranslation) {
+                const pattern = new RegExp(`\\b${newWord}\\b`, "gi"); // Crear un patrón basado en la nueva palabra
+                slangs.push({ pattern, translation: newTranslation });
+                alert(`New word added: "${newWord}" -> "${newTranslation}"`);
+                document.getElementById("new-word").value = "";
+                document.getElementById("new-translation").value = "";
+            } else {
+                alert("Please enter both a word and its translation.");
+            }
         }
     </script>
 </body>

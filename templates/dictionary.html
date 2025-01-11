@@ -3,15 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slang Dictionary</title>
+    <title>TalkShift - Dictionary</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F1F1F1;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 900px;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 64px;
+            font-weight: 500;
+            color: black;
+            margin: 0;
+        }
+        .header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #888888;
+            margin: 10px 0 20px;
+        }
+        .search-bar {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-bar input {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #888888;
+            border-radius: 8px;
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .search-bar input:focus {
+            border-color: #0022FF;
+        }
+        .dictionary-content h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: black;
+            margin: 20px 0 10px;
+        }
+        .dictionary-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Slang Dictionary</h1>
-    <ul>
-        {% for slang, meaning in slangs.items() %}
-            <li><strong>{{ slang }}</strong>: {{ meaning }}</li>
-        {% endfor %}
-    </ul>
-    <a href="/">Back to Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>TalkShi(f)t</h1>
+            <h2>Dictionary</h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Search for a word...">
+        </div>
+        <div class="dictionary-content" id="dictionary-content">
+            <!-- Palabras del diccionario -->
+            <h3>A</h3>
+            <p><strong>A Karen:</strong> A rude and entitled middle-aged woman.</p>
+            <p><strong>Ate:</strong> To succeed at something or do really well.</p>
+            <p><strong>AF:</strong> "As f***," used to emphasize something (e.g., "she’s cool AF").</p>
+
+            <h3>B</h3>
+            <p><strong>Bae:</strong> Before anyone else; babe or baby (a romantic partner or close friend).</p>
+            <p><strong>Basic:</strong> Boring, average, or unoriginal.</p>
+            <p><strong>BF/GF:</strong> Boyfriend/girlfriend.</p>
+            <p><strong>BFF:</strong> "Best friends forever."</p>
+            <p><strong>Big Yikes:</strong> Extremely embarrassing.</p>
+            <p><strong>Body count:</strong> The number of people someone has slept with.</p>
+            <p><strong>Bruh:</strong> Bro or dude (gender-neutral).</p>
+
+            <h3>C</h3>
+            <p><strong>Cap:</strong> Fake or a lie.</p>
+            <p><strong>CEO:</strong> To be the "CEO of something" means to excel at it.</p>
+            <p><strong>Cheugy:</strong> Outdated or trying too hard.</p>
+            <p><strong>Crashy:</strong> Crazy and trashy, like a trainwreck.</p>
+            <p><strong>Cringe:</strong> Something embarrassing or awkward.</p>
+            <p><strong>Crunk:</strong> Getting high and drunk simultaneously.</p>
+            <p><strong>CU46:</strong> "See you for sex" (text shorthand).</p>
+            <p><strong>Curve:</strong> To reject someone romantically.</p>
+
+            <h3>D</h3>
+            <p><strong>Dayger:</strong> A party during the day.</p>
+            <p><strong>Dead:</strong> Something so funny it "killed" the speaker with laughter.</p>
+            <p><strong>Dope:</strong> Cool or awesome.</p>
+
+            <h3>E</h3>
+            <p><strong>Emo:</strong> Someone emotional or dramatic.</p>
+            <p><strong>Extra:</strong> Over-the-top, excessive.</p>
+
+            <h3>F</h3>
+            <p><strong>Fam:</strong> A group of close friends.</p>
+            <p><strong>Fire:</strong> Amazing, trendy, or awesome.</p>
+            <p><strong>Fit:</strong> Short for "outfit."</p>
+            <p><strong>Flex:</strong> To show off.</p>
+            <p><strong>Function/Func:</strong> Party.</p>
+
+            <h3>G</h3>
+            <p><strong>Ghosted:</strong> To end a relationship by cutting off all communication.</p>
+            <p><strong>Go Off:</strong> Encouraging someone to continue, usually while ranting.</p>
+            <p><strong>GOAT:</strong> "Greatest of All Time."</p>
+            <p><strong>Gucci:</strong> Good, cool, or fine.</p>
+            <p><strong>Gyat:</strong> Big butt (a reaction like “goddamn”).</p>
+
+            <h3>H</h3>
+            <p><strong>Hangry:</strong> Hungry and angry.</p>
+            <p><strong>Hits Different:</strong> Something that feels different or more impactful than usual.</p>
+
+            <h3>I</h3>
+            <p><strong>IRL:</strong> In real life, as opposed to online.</p>
+            <p><strong>It’s Giving:</strong> Used to describe vibes or a feeling (e.g., "It’s giving 80s vibes").</p>
+            <p><strong>IYKYK:</strong> "If you know, you know."</p>
+
+            <h3>J</h3>
+            <p><strong>JOMO:</strong> Joy of Missing Out.</p>
+
+            <h3>K</h3>
+            <p><strong>Kick Back:</strong> A small, informal party.</p>
+
+            <h3>L</h3>
+            <p><strong>Lit:</strong> Amazing, exciting, or cool.</p>
+            <p><strong>LMIRL:</strong> "Let’s meet in real life."</p>
+            <p><strong>Low-Key:</strong> Subtle or understated.</p>
+
+            <h3>M</h3>
+            <p><strong>Molly:</strong> Slang for MDMA, a party drug.</p>
+            <p><strong>Mood:</strong> Used to express a relatable feeling.</p>
+
+            <h3>N</h3>
+            <p><strong>Netflix and Chill:</strong> A euphemism for casual sex.</p>
+            <p><strong>No Cap:</strong> No lie; to speak truthfully.</p>
+            <p><strong>Noob/n00b:</strong> A newcomer or someone inexperienced.</p>
+
+            <h3>O</h3>
+            <p><strong>OK, Boomer:</strong> Dismissive response to outdated attitudes.</p>
+            <p><strong>OMG:</strong> "Oh my gosh" or "Oh my God."</p>
+            <p><strong>ONG:</strong> Equivalent to "I swear to God."</p>
+
+            <h3>P</h3>
+            <p><strong>Periodt:</strong> Used to emphasize a statement.</p>
+            <p><strong>Plug:</strong> Someone who provides drugs.</p>
+            <p><strong>Pop Off:</strong> To react angrily or dramatically.</p>
+            <p><strong>Preppy:</strong> Stylish, upper-class aesthetic.</p>
+
+            <h3>R</h3>
+            <p><strong>Rager:</strong> A big, wild party.</p>
+            <p><strong>Ratio’d:</strong> Negative feedback outweighing positive on social media.</p>
+            <p><strong>Requestion:</strong> A request and a question, or asking again.</p>
+            <p><strong>Rizz:</strong> Charisma or charm.</p>
+
+            <h3>S</h3>
+            <p><strong>Salty:</strong> Bitter or upset.</p>
+            <p><strong>Serving:</strong> Looking great or stylish.</p>
+            <p><strong>Ship:</strong> To support two people being in a relationship.</p>
+            <p><strong>Shook:</strong> Extremely shocked or surprised.</p>
+            <p><strong>Slay:</strong> To be stylish or successful.</p>
+
+            <h3>T</h3>
+            <p><strong>TBH:</strong> "To be honest."</p>
+            <p><strong>Tea:</strong> Gossip or news.</p>
+            <p><strong>Thirsty:</strong> Desperate for attention.</p>
+            <p><strong>Turnt:</strong> To be high or drunk.</p>
+
+            <h3>V</h3>
+            <p><strong>Vanilla:</strong> Boring or plain.</p>
+
+            <h3>W</h3>
+            <p><strong>WTTP:</strong> "Want to trade photos?"</p>
+
+            <h3>X</h3>
+            <p><strong>X:</strong> Slang for ecstasy (drug).</p>
+
+            <h3>Y</h3>
+            <p><strong>Yassify:</strong> A dramatic makeover with beauty filters.</p>
+            <p><strong>Yeet:</strong> To throw something forcefully.</p>
+            <p><strong>YOLO:</strong> "You Only Live Once."</p>
+        </div>
+    </div>
+
+            <!-- Continúa con el resto de las palabras -->
+        </div>
+    </div>
+
+    <script>
+        const searchInput = document.getElementById('search-input');
+        const dictionaryContent = document.getElementById('dictionary-content');
+        const entries = Array.from(dictionaryContent.querySelectorAll('p'));
+        const headers = Array.from(dictionaryContent.querySelectorAll('h3'));
+
+        searchInput.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase();
+
+            // Filtrar palabras y ocultar/mostrar según la búsqueda
+            entries.forEach(entry => {
+                const text = entry.textContent.toLowerCase();
+                if (text.includes(query)) {
+                    entry.classList.remove('hidden');
+                } else {
+                    entry.classList.add('hidden');
+                }
+            });
+
+            // Mostrar u ocultar encabezados basados en palabras visibles debajo
+            headers.forEach(header => {
+                const nextSiblings = [];
+                let sibling = header.nextElementSibling;
+
+                // Agrupar todos los <p> relacionados al encabezado
+                while (sibling && sibling.tagName === 'P') {
+                    nextSiblings.push(sibling);
+                    sibling = sibling.nextElementSibling;
+                }
+
+                // Comprobar si hay al menos un <p> visible
+                const isVisible = nextSiblings.some(sibling => !sibling.classList.contains('hidden'));
+
+                if (isVisible) {
+                    header.classList.remove('hidden');
+                } else {
+                    header.classList.add('hidden');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

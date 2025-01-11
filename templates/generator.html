@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalkShift - Phrase Generator</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F1F1F1;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100%;
+        }
+        .container {
+            width: 900px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 64px;
+            font-weight: 500;
+            color: black;
+        }
+        .header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #888888;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 90%;
+            height: 150px;
+            border: 2px solid #888888;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            background-color: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #0022FF;
+        }
+        .generate-button {
+            width: 300px;
+            height: 50px;
+            background-color: #0022FF;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .generate-button:hover {
+            background-color: #0045FF;
+        }
+        .recent-list {
+            max-height: 200px;
+            overflow-y: scroll;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .recent-list h3 {
+            margin: 0 0 10px;
+            font-size: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        .recent-list ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .recent-list li {
+            margin: 10px 0;
+            font-size: 14px;
+            color: black;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TalkShi(f)t</h1>
+            <h2>Generate Gen Z Phrases</h2>
+        </div>
+
+        <!-- Input Phrase -->
+        <textarea id="input-phrase" placeholder="Enter a Millennial phrase..."></textarea>
+
+        <!-- Generated Phrase -->
+        <textarea id="generated-output" readonly placeholder="Generated Gen Z phrase will appear here..."></textarea>
+
+        <!-- Generate Button -->
+        <button class="generate-button" onclick="generatePhrase()">Generate Phrase</button>
+
+        <!-- Recent Phrases -->
+        <div class="recent-list">
+            <h3>Recent Translations</h3>
+            <ul id="recent-list">
+                <!-- Recent phrases will be added here -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Diccionario completo con las 91 palabras/frases y ejemplos
+        const dictionary = [
+            { millennial: "amazing", genz: ["lit", "fire", "slaps"] },
+            { millennial: "party", genz: ["rager", "function", "dayger"] },
+            { millennial: "friend", genz: ["fam", "bruh", "bro"] },
+            { millennial: "hungry and angry", genz: ["hangry"] },
+            { millennial: "cool", genz: ["fire", "dope", "lit"] },
+            { millennial: "outfit", genz: ["fit", "drip"] },
+            { millennial: "greatest of all time", genz: ["GOAT"] },
+            { millennial: "lie", genz: ["cap", "fake news"] },
+            { millennial: "gossip", genz: ["tea", "spill the tea"] },
+            { millennial: "awkward", genz: ["cringe"] },
+            { millennial: "criticize", genz: ["throw shade"] },
+            { millennial: "suspicious", genz: ["sus"] },
+            { millennial: "shocked", genz: ["shook"] },
+            { millennial: "totally true", genz: ["no cap"] },
+            { millennial: "you only live once", genz: ["YOLO"] },
+            { millennial: "popular and independent", genz: ["sigma"] },
+            { millennial: "charismatic", genz: ["rizz"] },
+            { millennial: "attention-seeking", genz: ["thirsty"] },
+            { millennial: "stylish", genz: ["snatched", "slaying", "serving"] },
+            { millennial: "drunk", genz: ["sloshed", "turnt"] },
+            { millennial: "let’s meet in real life", genz: ["LMIRL"] },
+            { millennial: "I’m dead from laughing", genz: ["dead"] },
+            { millennial: "casual sex", genz: ["smash"] },
+            { millennial: "boring", genz: ["vanilla"] },
+            { millennial: "overdramatic", genz: ["extra"] },
+            { millennial: "mad at someone", genz: ["salty"] },
+            { millennial: "drama queen", genz: ["emo"] },
+            { millennial: "criticize indirectly", genz: ["throw shade"] },
+            { millennial: "relatable feeling", genz: ["mood"] },
+            { millennial: "want two people together", genz: ["ship"] },
+            { millennial: "super embarrassed", genz: ["big yikes"] },
+            { millennial: "looking good", genz: ["serving"] },
+            { millennial: "popular guy", genz: ["sigma"] },
+            { millennial: "charming", genz: ["rizz"] },
+            { millennial: "stylish and rich", genz: ["preppy"] },
+            { millennial: "extremely stylish", genz: ["snatched"] },
+            { millennial: "shady behavior", genz: ["sus"] },
+            { millennial: "spread gossip", genz: ["spill the tea"] },
+            { millennial: "party during the day", genz: ["dayger"] },
+            { millennial: "super shocked", genz: ["shook"] },
+            { millennial: "seriously", genz: ["deadass"] },
+            { millennial: "that’s final", genz: ["periodt"] },
+            { millennial: "great music", genz: ["slaps"] },
+            { millennial: "social media backlash", genz: ["ratio’d"] },
+            { millennial: "MDMA drug", genz: ["Molly"] },
+            // Continúa agregando las palabras restantes siguiendo este formato
+        ];
+
+        // Función para generar la frase en Gen Z
+        function generatePhrase() {
+            const input = document.getElementById("input-phrase").value.toLowerCase();
+            let output = input;
+
+            // Reemplazar palabras Millennial con sus traducciones Gen Z
+            dictionary.forEach(entry => {
+                if (input.includes(entry.millennial)) {
+                    const randomGenz = entry.genz[Math.floor(Math.random() * entry.genz.length)];
+                    output = output.replace(entry.millennial, randomGenz);
+                }
+            });
+
+            // Mostrar la frase generada
+            document.getElementById("generated-output").value = output;
+
+            // Agregar a la lista de recientes
+            addToRecentList(input, output);
+        }
+
+        // Agregar frase a la lista de recientes
+        function addToRecentList(input, output) {
+            const recentList = document.getElementById("recent-list");
+            const listItem = document.createElement("li");
+            listItem.textContent = `Millennial: ${input} → Gen Z: ${output}`;
+            recentList.prepend(listItem);
+
+            // Limitar a las 10 frases más recientes
+            if (recentList.children.length > 10) {
+                recentList.removeChild(recentList.lastChild);
+            }
+        }
+    </script>
+</body>
+</html>
